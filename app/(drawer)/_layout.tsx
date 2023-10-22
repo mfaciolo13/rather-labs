@@ -1,4 +1,6 @@
+import Entypo from "@expo/vector-icons/Entypo";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+
 import { Link } from "expo-router";
 import { Drawer } from "expo-router/drawer";
 
@@ -11,21 +13,32 @@ export default function TabLayout() {
 
   return (
     <Drawer
-      screenOptions={{
-        headerShown: false,
-      }}
+      screenOptions={({ navigation }) => ({
+        headerLeft: () => (
+          <Pressable onPress={navigation.toggleDrawer}>
+            <FontAwesome
+              name="bars"
+              size={20}
+              style={{
+                marginLeft: 15,
+              }}
+            />
+          </Pressable>
+        ),
+        title: "Rather Labs",
+      })}
     >
       <Drawer.Screen
         name="index"
         options={{
-          title: "Tab One",
+          drawerLabel: "Home",
           headerRight: () => (
             <Link href="/modal" asChild>
               <Pressable>
                 {({ pressed }) => (
-                  <FontAwesome
-                    name="info-circle"
-                    size={25}
+                  <Entypo
+                    name="dots-three-horizontal"
+                    size={20}
                     color={Colors[colorScheme ?? "light"].text}
                     style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
                   />
@@ -38,7 +51,7 @@ export default function TabLayout() {
       <Drawer.Screen
         name="two"
         options={{
-          title: "Tab Two",
+          drawerLabel: "Students",
         }}
       />
     </Drawer>
