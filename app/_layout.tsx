@@ -1,4 +1,3 @@
-import Entypo from "@expo/vector-icons/Entypo";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import {
   DarkTheme,
@@ -6,10 +5,13 @@ import {
   ThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { SplashScreen, Stack } from "expo-router";
+import { SplashScreen } from "expo-router";
 import { useEffect } from "react";
-import { Pressable, StyleSheet, useColorScheme } from "react-native";
-import { createClient } from "@supabase/supabase-js";
+import { useColorScheme } from "react-native";
+import { Provider } from "react-redux";
+import { store } from "../config/store";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import StackNavigation from "./stackNavigation";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -53,32 +55,11 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: "modal" }} />
-      </Stack>
-      <Pressable style={styles.plusButton}>
-        <Entypo name="plus" size={20} />
-      </Pressable>
+      <Provider store={store}>
+        <BottomSheetModalProvider>
+          <StackNavigation />
+        </BottomSheetModalProvider>
+      </Provider>
     </ThemeProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  plusButton: {
-    borderRadius: 100,
-    bottom: 20,
-    position: "absolute",
-    right: 20,
-    width: 40,
-    height: 40,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#fff",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.15,
-    shadowRadius: 5,
-    elevation: 5,
-  },
-});

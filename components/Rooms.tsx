@@ -4,9 +4,20 @@ import { RoomsType } from "../types/supabase";
 import { getRooms } from "../utils/rooms";
 import { Entypo } from "@expo/vector-icons";
 import { cardsColors } from "../constants/Colors";
+import { useDispatch } from "react-redux";
+import { showBottomSheet } from "../reducers/bottomsheetReducer";
 
 const Rooms = () => {
+  const dispatch = useDispatch();
+
   const [rooms, setRooms] = useState<RoomsType>([]);
+
+  const handleAction = () =>
+    dispatch(
+      showBottomSheet({
+        content: <Text>Delete room</Text>,
+      })
+    );
 
   useEffect(() => {
     const fetchRooms = async () => {
@@ -26,7 +37,7 @@ const Rooms = () => {
             style={[styles.card, { backgroundColor: cardsColors[index] }]}
           >
             <Text>{room.name}</Text>
-            <Pressable>
+            <Pressable onPress={handleAction}>
               <Entypo name="dots-three-horizontal" size={20} color="white" />
             </Pressable>
           </Pressable>
@@ -44,6 +55,7 @@ const styles = StyleSheet.create({
     width: "100%",
     paddingHorizontal: 8,
     paddingTop: 8,
+    rowGap: 8,
   },
   card: {
     backgroundColor: "blue",
