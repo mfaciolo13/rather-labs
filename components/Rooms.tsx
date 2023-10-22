@@ -1,11 +1,12 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
+import { Entypo } from "@expo/vector-icons";
+import { useDispatch } from "react-redux";
+import { Link } from "expo-router";
 import { RoomsType } from "../types/supabase";
 import { getRooms } from "../utils/rooms";
-import { Entypo } from "@expo/vector-icons";
-import { cardsColors } from "../constants/Colors";
-import { useDispatch } from "react-redux";
 import { showBottomSheet } from "../reducers/bottomsheetReducer";
+import { cardsColors } from "../constants/Colors";
 
 const Rooms = () => {
   const dispatch = useDispatch();
@@ -32,15 +33,22 @@ const Rooms = () => {
     <View style={styles.container}>
       {rooms.map((room, index) => {
         return (
-          <Pressable
+          <Link
+            href={{
+              pathname: "/room/[id]",
+              params: { id: "bacon" },
+            }}
+            asChild
             key={room.id}
             style={[styles.card, { backgroundColor: cardsColors[index] }]}
           >
-            <Text>{room.name}</Text>
-            <Pressable onPress={handleAction}>
-              <Entypo name="dots-three-horizontal" size={20} color="white" />
+            <Pressable>
+              <Text>{room.name}</Text>
+              <Pressable onPress={handleAction}>
+                <Entypo name="dots-three-horizontal" size={20} color="white" />
+              </Pressable>
             </Pressable>
-          </Pressable>
+          </Link>
         );
       })}
     </View>

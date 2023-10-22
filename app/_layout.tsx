@@ -7,11 +7,13 @@ import {
 import { useFonts } from "expo-font";
 import { SplashScreen } from "expo-router";
 import { useEffect } from "react";
-import { useColorScheme } from "react-native";
+import { Pressable, useColorScheme } from "react-native";
 import { Provider } from "react-redux";
 import { store } from "../config/store";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import StackNavigation from "./stackNavigation";
+import { Drawer } from "expo-router/drawer";
+import { Entypo } from "@expo/vector-icons";
+import Colors from "../constants/Colors";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -57,7 +59,49 @@ function RootLayoutNav() {
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <Provider store={store}>
         <BottomSheetModalProvider>
-          <StackNavigation />
+          <Drawer
+            screenOptions={({ navigation }) => ({
+              headerLeft: () => (
+                <Pressable onPress={navigation.toggleDrawer}>
+                  <FontAwesome
+                    name="bars"
+                    size={20}
+                    style={{
+                      marginLeft: 15,
+                    }}
+                  />
+                </Pressable>
+              ),
+              headerRight: () => (
+                <Pressable>
+                  {({ pressed }) => (
+                    <Entypo
+                      name="dots-three-horizontal"
+                      size={20}
+                      color={Colors[colorScheme ?? "light"].text}
+                      style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                    />
+                  )}
+                </Pressable>
+              ),
+            })}
+          >
+            <Drawer.Screen
+              name="index"
+              options={{
+                drawerLabel: "Home",
+              }}
+            />
+            <Drawer.Screen
+              name="room"
+              options={{
+                drawerItemStyle: {
+                  display: "none",
+                },
+                headerShown: false,
+              }}
+            />
+          </Drawer>
         </BottomSheetModalProvider>
       </Provider>
     </ThemeProvider>
