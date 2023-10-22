@@ -1,4 +1,4 @@
-import { Entypo } from "@expo/vector-icons";
+import Entypo from "@expo/vector-icons/Entypo";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import {
   DarkTheme,
@@ -9,6 +9,7 @@ import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
 import { useEffect } from "react";
 import { Pressable, StyleSheet, useColorScheme } from "react-native";
+import { createClient } from "@supabase/supabase-js";
 
 export {
   // Catch any errors thrown by the Layout component.
