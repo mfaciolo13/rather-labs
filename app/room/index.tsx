@@ -1,19 +1,13 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
-import React from "react";
-import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { FontAwesome } from "@expo/vector-icons";
+import { Stack, useRouter } from "expo-router";
+import React from "react";
+import { Pressable, StyleSheet, View } from "react-native";
 
 const Room = () => {
   const router = useRouter();
-  const params = useLocalSearchParams();
 
   return (
-    <View
-      style={{
-        backgroundColor: "#fff",
-        flex: 1,
-      }}
-    >
+    <View style={styles.container}>
       <Stack.Screen
         options={{
           headerLeft: () => (
@@ -29,4 +23,9 @@ const Room = () => {
 
 export default Room;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "#fff",
+    flex: 1,
+  },
+});

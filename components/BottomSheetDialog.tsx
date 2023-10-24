@@ -1,13 +1,13 @@
-import { Dimensions, StyleSheet, View } from "react-native";
-import React, { useCallback, useEffect, useMemo, useRef } from "react";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
   BottomSheetBackdropProps,
   BottomSheetModal,
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
-
+import React, { useCallback, useEffect, useMemo, useRef } from "react";
+import { Dimensions, StyleSheet, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
 import CustomBackdrop from "./CustomBackdrop";
 
 const { height } = Dimensions.get("window");
@@ -28,14 +28,14 @@ const BottomSheetDialog = ({
 
   const topMargin = useMemo(
     () => ({ maxHeight: height - insets.top }),
-    [insets.top]
+    [insets.top],
   );
 
   const renderBackdrop = useCallback(
     (props: BottomSheetBackdropProps) => (
       <CustomBackdrop {...props} onPress={onDismiss} />
     ),
-    [onDismiss]
+    [onDismiss],
   );
 
   useEffect(() => {

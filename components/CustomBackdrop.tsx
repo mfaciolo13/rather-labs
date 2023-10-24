@@ -1,5 +1,5 @@
-import React, { useMemo } from "react";
 import { BottomSheetBackdropProps } from "@gorhom/bottom-sheet";
+import React, { useMemo } from "react";
 import { StyleProp, TouchableOpacity, ViewStyle } from "react-native";
 
 const CustomBackdrop = ({ onPress, style }: CustomBackdropProps) => {
@@ -15,7 +15,7 @@ const CustomBackdrop = ({ onPress, style }: CustomBackdropProps) => {
         opacity: OPACITY,
       },
     ],
-    [style]
+    [style],
   );
 
   return (

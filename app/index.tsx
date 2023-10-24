@@ -1,20 +1,18 @@
 import Entypo from "@expo/vector-icons/Entypo";
-
-import { FlatList, Pressable, StyleSheet, Text } from "react-native";
-
-import BottomSheetDialog from "../components/BottomSheetDialog";
+import { Link, useFocusEffect, useRouter } from "expo-router";
+import { useCallback, useState } from "react";
+import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
+
+import { deleteRoom, getRooms } from "../api/rooms";
+import BottomSheetDialog from "../components/BottomSheetDialog";
+import NoRooms from "../components/NoRooms";
+import { cardsColors } from "../constants/Colors";
 import {
   hideBottomSheet,
   showBottomSheet,
 } from "../reducers/bottomsheetReducer";
-import { View } from "react-native";
-import { useCallback, useEffect, useState } from "react";
 import { RoomsType } from "../types/supabase";
-import { deleteRoom, getRooms } from "../api/rooms";
-import { Link, useFocusEffect, useRouter } from "expo-router";
-import { cardsColors } from "../constants/Colors";
-import NoRooms from "../components/NoRooms";
 
 export default function TabLayout() {
   const bottomSheet = useSelector(({ bottomSheet }) => bottomSheet);
@@ -47,7 +45,7 @@ export default function TabLayout() {
             <Text>Delete room</Text>
           </Pressable>
         ),
-      })
+      }),
     );
 
   const handleCreateRoom = () => {
@@ -63,7 +61,7 @@ export default function TabLayout() {
             <Text>Create room</Text>
           </Pressable>
         ),
-      })
+      }),
     );
   };
 
@@ -74,7 +72,7 @@ export default function TabLayout() {
   useFocusEffect(
     useCallback(() => {
       fetchRooms();
-    }, [])
+    }, []),
   );
 
   return (

@@ -1,4 +1,5 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import {
   DarkTheme,
   DefaultTheme,
@@ -6,13 +7,13 @@ import {
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { SplashScreen } from "expo-router";
+import { Drawer } from "expo-router/drawer";
 import { useEffect } from "react";
 import { Pressable, useColorScheme } from "react-native";
-import { Provider } from "react-redux";
-import { store } from "../config/store";
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { Drawer } from "expo-router/drawer";
 import { ToastProvider } from "react-native-toast-notifications";
+import { Provider } from "react-redux";
+
+import { store } from "../config/store";
 
 export { ErrorBoundary } from "expo-router";
 
