@@ -1,9 +1,6 @@
 import Entypo from "@expo/vector-icons/Entypo";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
 
-import { Drawer } from "expo-router/drawer";
-
-import { Pressable, StyleSheet, Text, useColorScheme } from "react-native";
+import { FlatList, Pressable, StyleSheet, Text } from "react-native";
 
 import BottomSheetDialog from "../components/BottomSheetDialog";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,39 +9,60 @@ import {
   showBottomSheet,
 } from "../reducers/bottomsheetReducer";
 import { View } from "react-native";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { RoomsType } from "../types/supabase";
-import { getRooms } from "../utils/rooms";
-import { Link } from "expo-router";
+import { deleteRoom, getRooms } from "../api/rooms";
+import { Link, useFocusEffect, useRouter } from "expo-router";
 import { cardsColors } from "../constants/Colors";
+import NoRooms from "../components/NoRooms";
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
   const bottomSheet = useSelector(({ bottomSheet }) => bottomSheet);
   const dispatch = useDispatch();
+  const router = useRouter();
 
-  const [rooms, setRooms] = useState<RoomsType>([]);
+  const [rooms, setRooms] = useState<RoomsType[] | undefined>([]);
+  const [refreshing, setRefreshing] = useState(false);
 
-  const handleAction = () =>
+  const fetchRooms = async () => {
+    setRefreshing(true);
+    const data = await getRooms();
+
+    setRooms(data);
+    setRefreshing(false);
+  };
+
+  const handleAction = (id: number) =>
     dispatch(
       showBottomSheet({
-        content: <Text>Delete room</Text>,
+        content: (
+          <Pressable
+            onPress={async () => {
+              await deleteRoom(id);
+
+              onDismiss();
+              return fetchRooms();
+            }}
+          >
+            <Text>Delete room</Text>
+          </Pressable>
+        ),
       })
     );
-
-  useEffect(() => {
-    const fetchRooms = async () => {
-      const data = await getRooms();
-
-      setRooms(data);
-    };
-    fetchRooms();
-  }, []);
 
   const handleCreateRoom = () => {
     dispatch(
       showBottomSheet({
-        content: <Text>Create new room</Text>,
+        content: (
+          <Pressable
+            onPress={() => {
+              router.push("/room/create");
+              onDismiss();
+            }}
+          >
+            <Text>Create room</Text>
+          </Pressable>
+        ),
       })
     );
   };
@@ -53,27 +71,37 @@ export default function TabLayout() {
     dispatch(hideBottomSheet());
   };
 
+  useFocusEffect(
+    useCallback(() => {
+      fetchRooms();
+    }, [])
+  );
+
   return (
     <>
       <View style={styles.container}>
-        {rooms.map((room, index) => {
-          return (
+        <FlatList
+          onRefresh={fetchRooms}
+          refreshing={refreshing}
+          ListEmptyComponent={() => <NoRooms />}
+          data={rooms}
+          contentContainerStyle={{ flexGrow: 1 }}
+          renderItem={({ item, index }) => (
             <Link
               href={
                 {
                   pathname: "/room",
                   params: {
-                    id: room.id,
+                    id: item.id,
                   },
                 } as any
               }
               asChild
-              key={room.id}
               style={[styles.card, { backgroundColor: cardsColors[index] }]}
             >
               <Pressable>
-                <Text>{room.name}</Text>
-                <Pressable onPress={handleAction}>
+                <Text>{item.name}</Text>
+                <Pressable onPress={() => handleAction(item.id)}>
                   <Entypo
                     name="dots-three-horizontal"
                     size={20}
@@ -82,8 +110,8 @@ export default function TabLayout() {
                 </Pressable>
               </Pressable>
             </Link>
-          );
-        })}
+          )}
+        />
       </View>
       <BottomSheetDialog
         visible={bottomSheet.generalBsm.visible}
@@ -119,7 +147,7 @@ const styles = StyleSheet.create({
     width: "100%",
     paddingHorizontal: 8,
     paddingTop: 8,
-    rowGap: 8,
+    backgroundColor: "#fff",
   },
   card: {
     backgroundColor: "blue",
@@ -129,5 +157,6 @@ const styles = StyleSheet.create({
     height: 90,
     flexDirection: "row",
     justifyContent: "space-between",
+    marginBottom: 8,
   },
 });

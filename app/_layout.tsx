@@ -12,20 +12,10 @@ import { Provider } from "react-redux";
 import { store } from "../config/store";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { Drawer } from "expo-router/drawer";
-import { Entypo } from "@expo/vector-icons";
-import Colors from "../constants/Colors";
+import { ToastProvider } from "react-native-toast-notifications";
 
-export {
-  // Catch any errors thrown by the Layout component.
-  ErrorBoundary,
-} from "expo-router";
+export { ErrorBoundary } from "expo-router";
 
-export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: "(drawer)",
-};
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
@@ -34,7 +24,6 @@ export default function RootLayout() {
     ...FontAwesome.font,
   });
 
-  // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
     if (error) throw error;
   }, [error]);
@@ -58,51 +47,42 @@ function RootLayoutNav() {
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <Provider store={store}>
-        <BottomSheetModalProvider>
-          <Drawer
-            screenOptions={({ navigation }) => ({
-              headerLeft: () => (
-                <Pressable onPress={navigation.toggleDrawer}>
-                  <FontAwesome
-                    name="bars"
-                    size={20}
-                    style={{
-                      marginLeft: 15,
-                    }}
-                  />
-                </Pressable>
-              ),
-              headerRight: () => (
-                <Pressable>
-                  {({ pressed }) => (
-                    <Entypo
-                      name="dots-three-horizontal"
+        <ToastProvider duration={2000}>
+          <BottomSheetModalProvider>
+            <Drawer
+              screenOptions={({ navigation }) => ({
+                headerLeft: () => (
+                  <Pressable onPress={navigation.toggleDrawer}>
+                    <FontAwesome
+                      name="bars"
                       size={20}
-                      color={Colors[colorScheme ?? "light"].text}
-                      style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                      style={{
+                        marginLeft: 15,
+                      }}
                     />
-                  )}
-                </Pressable>
-              ),
-            })}
-          >
-            <Drawer.Screen
-              name="index"
-              options={{
-                drawerLabel: "Home",
-              }}
-            />
-            <Drawer.Screen
-              name="room"
-              options={{
-                drawerItemStyle: {
-                  display: "none",
-                },
-                headerShown: false,
-              }}
-            />
-          </Drawer>
-        </BottomSheetModalProvider>
+                  </Pressable>
+                ),
+              })}
+            >
+              <Drawer.Screen
+                name="index"
+                options={{
+                  title: "Rooms",
+                  drawerLabel: "Home",
+                }}
+              />
+              <Drawer.Screen
+                name="room"
+                options={{
+                  drawerItemStyle: {
+                    display: "none",
+                  },
+                  headerShown: false,
+                }}
+              />
+            </Drawer>
+          </BottomSheetModalProvider>
+        </ToastProvider>
       </Provider>
     </ThemeProvider>
   );

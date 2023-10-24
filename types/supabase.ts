@@ -12,18 +12,51 @@ export interface Database {
       rooms: {
         Row: {
           created_at: string;
+          description: string | null;
           id: number;
-          name: string | null;
+          name: string;
         };
         Insert: {
           created_at?: string;
+          description?: string | null;
           id?: number;
-          name?: string | null;
+          name: string;
         };
         Update: {
           created_at?: string;
+          description?: string | null;
           id?: number;
+          name?: string;
+        };
+        Relationships: [];
+      };
+      students: {
+        Row: {
+          age: number | null;
+          created_at: string;
+          gender: string | null;
+          id: number;
+          last_name: string | null;
+          name: string | null;
+          room: string | null;
+        };
+        Insert: {
+          age?: number | null;
+          created_at?: string;
+          gender?: string | null;
+          id?: number;
+          last_name?: string | null;
           name?: string | null;
+          room?: string | null;
+        };
+        Update: {
+          age?: number | null;
+          created_at?: string;
+          gender?: string | null;
+          id?: number;
+          last_name?: string | null;
+          name?: string | null;
+          room?: string | null;
         };
         Relationships: [];
       };
@@ -35,7 +68,7 @@ export interface Database {
       [_ in never]: never;
     };
     Enums: {
-      [_ in never]: never;
+      mix: "asda" | "123";
     };
     CompositeTypes: {
       [_ in never]: never;
@@ -43,4 +76,4 @@ export interface Database {
   };
 }
 
-export type RoomsType = Database["public"]["Tables"]["rooms"]["Row"][];
+export type RoomsType = Database["public"]["Tables"]["rooms"]["Row"];

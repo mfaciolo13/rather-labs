@@ -23,7 +23,6 @@ const Room = () => {
           ),
         }}
       />
-      <Text>index</Text>
     </View>
   );
 };
