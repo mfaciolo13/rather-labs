@@ -83,14 +83,14 @@ export default function TabLayout() {
           refreshing={refreshing}
           ListEmptyComponent={() => <NoRooms />}
           data={rooms}
-          contentContainerStyle={{ flexGrow: 1 }}
+          contentContainerStyle={styles.flatList}
           renderItem={({ item, index }) => (
             <Link
               href={
                 {
                   pathname: "/room",
                   params: {
-                    id: item.id,
+                    ...item,
                   },
                 } as any
               }
@@ -98,7 +98,10 @@ export default function TabLayout() {
               style={[styles.card, { backgroundColor: cardsColors[index] }]}
             >
               <Pressable>
-                <Text>{item.name}</Text>
+                <View style={styles.text}>
+                  <Text style={styles.name}>{item.name}</Text>
+                  <Text style={styles.description}>{item.description}</Text>
+                </View>
                 <Pressable onPress={() => handleAction(item.id)}>
                   <Entypo
                     name="dots-three-horizontal"
@@ -156,5 +159,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 8,
+  },
+  flatList: {
+    flexGrow: 1,
+  },
+  text: {
+    justifyContent: "space-between",
+  },
+  name: { fontWeight: "600" },
+  description: {
+    fontSize: 12,
   },
 });
