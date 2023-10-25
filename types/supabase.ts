@@ -12,19 +12,19 @@ export interface Database {
       rooms: {
         Row: {
           created_at: string;
-          description: string | null;
+          description: string;
           id: number;
           name: string;
         };
         Insert: {
           created_at?: string;
-          description?: string | null;
+          description: string;
           id?: number;
           name: string;
         };
         Update: {
           created_at?: string;
-          description?: string | null;
+          description?: string;
           id?: number;
           name?: string;
         };
@@ -32,33 +32,43 @@ export interface Database {
       };
       students: {
         Row: {
-          age: number | null;
           created_at: string;
-          gender: string | null;
+          date_of_birth: string;
+          email: string;
+          gender: string;
           id: number;
-          last_name: string | null;
-          name: string | null;
-          room: string | null;
+          last_name: string;
+          name: string;
+          room: number;
         };
         Insert: {
-          age?: number | null;
           created_at?: string;
-          gender?: string | null;
+          date_of_birth: string;
+          email: string;
+          gender: string;
           id?: number;
-          last_name?: string | null;
-          name?: string | null;
-          room?: string | null;
+          last_name: string;
+          name: string;
+          room: number;
         };
         Update: {
-          age?: number | null;
           created_at?: string;
-          gender?: string | null;
+          date_of_birth?: string;
+          email?: string;
+          gender?: string;
           id?: number;
-          last_name?: string | null;
-          name?: string | null;
-          room?: string | null;
+          last_name?: string;
+          name?: string;
+          room?: number;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: "students_room_fkey";
+            columns: ["room"];
+            referencedRelation: "rooms";
+            referencedColumns: ["id"];
+          },
+        ];
       };
     };
     Views: {
@@ -75,5 +85,3 @@ export interface Database {
     };
   };
 }
-
-export type RoomsType = Database["public"]["Tables"]["rooms"]["Row"];

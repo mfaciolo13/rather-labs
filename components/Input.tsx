@@ -6,10 +6,18 @@ interface InputProps {
   value: string;
   error?: string;
   onChange: (value: string) => void;
-  onBlur: () => void;
+  onBlur?: () => void;
+  keyboardType?: "default" | "numeric" | "email-address" | "phone-pad";
 }
 
-const Input = ({ label, value, error, onChange, onBlur }: InputProps) => {
+const Input = ({
+  label,
+  value,
+  error,
+  keyboardType,
+  onChange,
+  onBlur,
+}: InputProps) => {
   return (
     <View>
       <Text style={styles.label}>{label}</Text>
@@ -18,8 +26,9 @@ const Input = ({ label, value, error, onChange, onBlur }: InputProps) => {
         onBlur={onBlur}
         onChangeText={onChange}
         value={value}
+        keyboardType={keyboardType}
       />
-      {error && <Text>{error}</Text>}
+      {error && <Text style={styles.error}>{error}</Text>}
     </View>
   );
 };
@@ -28,7 +37,7 @@ export default Input;
 
 const styles = StyleSheet.create({
   label: {
-    marginBottom: 5,
+    marginBottom: 4,
   },
   input: {
     borderWidth: 1,
@@ -42,5 +51,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 5,
     elevation: 5,
+  },
+  error: {
+    color: "red",
+    fontSize: 12,
+    marginTop: 8,
   },
 });

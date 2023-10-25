@@ -8,6 +8,7 @@ import { createRoom } from "../../api/rooms";
 import Button from "../../components/Button";
 import Input from "../../components/Input";
 import { CREATE_ROOM_FORM_NAMES } from "../../constants/formNames";
+import { formErrors } from "../../utils/errors";
 
 interface Props {
   name: string;
@@ -53,7 +54,7 @@ const Create = () => {
               onBlur={onBlur}
               onChange={onChange}
               value={value}
-              error={error?.message}
+              error={formErrors(error?.type as string)}
             />
           )}
           name={CREATE_ROOM_FORM_NAMES.ROOM_NAME}
@@ -65,17 +66,23 @@ const Create = () => {
           render={({
             field: { onChange, onBlur, value },
             fieldState: { error },
-          }) => (
-            <Input
-              label="Description"
-              onBlur={onBlur}
-              onChange={onChange}
-              value={value}
-              error={error?.message}
-            />
-          )}
+          }) => {
+            return (
+              <Input
+                label="Description"
+                onBlur={onBlur}
+                onChange={onChange}
+                value={value}
+                error={formErrors(error?.type as string)}
+              />
+            );
+          }}
           name={CREATE_ROOM_FORM_NAMES.ROOM_DESCRIPTION}
-          rules={{ required: true, minLength: 3, maxLength: 20 }}
+          rules={{
+            required: true,
+            minLength: 3,
+            maxLength: 20,
+          }}
           defaultValue=""
         />
       </View>
@@ -99,7 +106,7 @@ const Create = () => {
 export default Create;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 8, backgroundColor: "#fff" },
-  contentContainer: { flex: 1, rowGap: 8 },
+  container: { flex: 1, padding: 16, backgroundColor: "#fff" },
+  contentContainer: { flex: 1, rowGap: 12 },
   buttonsContainer: { alignItems: "center" },
 });

@@ -81,6 +81,22 @@ function RootLayoutNav() {
                   headerShown: false,
                 }}
               />
+              <Drawer.Screen
+                name="students"
+                options={{
+                  title: "Students",
+                  drawerLabel: "Students",
+                }}
+              />
+              <Drawer.Screen
+                name="student"
+                options={{
+                  drawerItemStyle: {
+                    display: "none",
+                  },
+                  headerShown: false,
+                }}
+              />
             </Drawer>
           </BottomSheetModalProvider>
         </ToastProvider>

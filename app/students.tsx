@@ -2,32 +2,34 @@ import Entypo from "@expo/vector-icons/Entypo";
 import { Link, useFocusEffect, useRouter } from "expo-router";
 import { useCallback, useState } from "react";
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
-import { deleteRoom, getRooms } from "../api/rooms";
-import BottomSheetDialog from "../components/BottomSheetDialog";
+import { getStudents } from "../api/students";
 import NoData from "../components/NoData";
 import { cardsColors } from "../constants/Colors";
 import {
   hideBottomSheet,
   showBottomSheet,
 } from "../reducers/bottomsheetReducer";
-import { RoomsType } from "../types/types";
+import { StudentsType } from "../types/types";
 
-export default function TabLayout() {
-  const bottomSheet = useSelector(({ bottomSheet }) => bottomSheet);
+const Students = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const [rooms, setRooms] = useState<RoomsType[] | undefined>([]);
+  const [students, setStudents] = useState<StudentsType[] | undefined>([]);
   const [refreshing, setRefreshing] = useState(false);
 
-  const fetchRooms = async () => {
+  const fetchStudents = async () => {
     setRefreshing(true);
-    const data = await getRooms();
+    const data = await getStudents();
 
-    setRooms(data);
+    setStudents(data);
     setRefreshing(false);
+  };
+
+  const onDismiss = () => {
+    dispatch(hideBottomSheet());
   };
 
   const handleAction = (id: number) =>
@@ -36,13 +38,11 @@ export default function TabLayout() {
         content: (
           <Pressable
             onPress={async () => {
-              await deleteRoom(id);
-
               onDismiss();
-              return fetchRooms();
+              return fetchStudents();
             }}
           >
-            <Text>Delete room</Text>
+            <Text>Delete student</Text>
           </Pressable>
         ),
       }),
@@ -54,24 +54,20 @@ export default function TabLayout() {
         content: (
           <Pressable
             onPress={() => {
-              router.push("/room/create");
+              router.push("/student/create");
               onDismiss();
             }}
           >
-            <Text>Create room</Text>
+            <Text>Create student</Text>
           </Pressable>
         ),
       }),
     );
   };
 
-  const onDismiss = () => {
-    dispatch(hideBottomSheet());
-  };
-
   useFocusEffect(
     useCallback(() => {
-      fetchRooms();
+      fetchStudents();
     }, []),
   );
 
@@ -79,10 +75,10 @@ export default function TabLayout() {
     <>
       <View style={styles.container}>
         <FlatList
-          onRefresh={fetchRooms}
+          onRefresh={fetchStudents}
           refreshing={refreshing}
           ListEmptyComponent={() => <NoData />}
-          data={rooms}
+          data={students}
           contentContainerStyle={styles.flatList}
           renderItem={({ item, index }) => (
             <Link
@@ -99,8 +95,10 @@ export default function TabLayout() {
             >
               <Pressable>
                 <View style={styles.text}>
-                  <Text style={styles.name}>{item.name}</Text>
-                  <Text style={styles.description}>{item.description}</Text>
+                  <Text style={styles.name}>
+                    {item.name} {item.last_name}
+                  </Text>
+                  <Text style={styles.description}>{item.email}</Text>
                 </View>
                 <Pressable onPress={() => handleAction(item.id)}>
                   <Entypo
@@ -114,17 +112,14 @@ export default function TabLayout() {
           )}
         />
       </View>
-      <BottomSheetDialog
-        visible={bottomSheet.generalBsm.visible}
-        content={bottomSheet.generalBsm.content}
-        onDismiss={onDismiss}
-      />
       <Pressable style={styles.plusButton} onPress={handleCreateRoom}>
         <Entypo name="plus" size={20} />
       </Pressable>
     </>
   );
-}
+};
+
+export default Students;
 
 const styles = StyleSheet.create({
   plusButton: {
