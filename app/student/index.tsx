@@ -5,20 +5,21 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { formatLocalDateString } from "../../utils/date";
 
-const Room = () => {
+const Student = () => {
   const router = useRouter();
   const params = useLocalSearchParams();
 
-  console.log(params);
   const { id, name, description, created_at } = params;
+
+  console.log(params);
 
   return (
     <View style={styles.container}>
       <Stack.Screen
         options={{
-          title: "Room",
+          title: "Student",
           headerLeft: () => (
-            <Pressable onPress={() => router.back()}>
+            <Pressable onPress={() => router.replace("/students")}>
               <FontAwesome name="chevron-left" size={20} color="black" />
             </Pressable>
           ),
@@ -46,7 +47,7 @@ const Room = () => {
   );
 };
 
-export default Room;
+export default Student;
 
 const styles = StyleSheet.create({
   container: {

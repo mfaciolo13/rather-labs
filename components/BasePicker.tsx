@@ -20,7 +20,13 @@ const BasePicker = ({ label, value, error, options, onChange }: Props) => {
       <Text style={styles.label}>{label}</Text>
       <RNPicker selectedValue={value} onValueChange={onChange}>
         {options.map((option) => {
-          return <RNPicker.Item label={option.label} value={option.value} />;
+          return (
+            <RNPicker.Item
+              key={option.value}
+              label={option.label}
+              value={option.value}
+            />
+          );
         })}
       </RNPicker>
       {error && <Text style={styles.error}>{error}</Text>}

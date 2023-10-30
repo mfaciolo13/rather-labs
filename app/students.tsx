@@ -4,7 +4,7 @@ import { useCallback, useState } from "react";
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 import { useDispatch } from "react-redux";
 
-import { getStudents } from "../api/students";
+import { getStudents, removeStudent } from "../api/students";
 import NoData from "../components/NoData";
 import { cardsColors } from "../constants/Colors";
 import {
@@ -38,6 +38,7 @@ const Students = () => {
         content: (
           <Pressable
             onPress={async () => {
+              await removeStudent(id);
               onDismiss();
               return fetchStudents();
             }}
@@ -54,7 +55,7 @@ const Students = () => {
         content: (
           <Pressable
             onPress={() => {
-              router.push("/student/create");
+              router.replace("/student/create");
               onDismiss();
             }}
           >
@@ -84,7 +85,7 @@ const Students = () => {
             <Link
               href={
                 {
-                  pathname: "/room",
+                  pathname: "/student",
                   params: {
                     ...item,
                   },

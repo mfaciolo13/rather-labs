@@ -54,7 +54,7 @@ export default function TabLayout() {
         content: (
           <Pressable
             onPress={() => {
-              router.push("/room/create");
+              router.replace("/room/create");
               onDismiss();
             }}
           >

@@ -1,11 +1,13 @@
 import { FontAwesome } from "@expo/vector-icons";
-import { Stack, useLocalSearchParams, useRouter } from "expo-router";
-import React, { useState } from "react";
+import { Stack, useRouter } from "expo-router";
+import { useFocusEffect } from "expo-router/src/useFocusEffect";
+import React, { useCallback, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { StyleSheet, View, TouchableOpacity, Pressable } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { useDispatch } from "react-redux";
 
+import { getRooms } from "../../api/rooms";
 import { createStudent } from "../../api/students";
 import BasePicker from "../../components/BasePicker";
 import Button from "../../components/Button";
@@ -13,6 +15,7 @@ import Input from "../../components/Input";
 import RadioButton from "../../components/RadioButton";
 import { STUDENTS_FORM_NAMES } from "../../constants/formNames";
 import { showBottomSheet } from "../../reducers/bottomsheetReducer";
+import { RoomsType } from "../../types/types";
 import {
   YEAR_DATE_FORMAT_OPTION,
   formatLocalDateString,
@@ -35,9 +38,20 @@ const Students = () => {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const { rooms } = useLocalSearchParams<{
-    rooms: [];
-  }>();
+  const [rooms, setRooms] = useState<RoomsType[] | []>([]);
+
+  const fetchRooms = async () => {
+    const data = await getRooms();
+
+    setRooms(data ?? []);
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchRooms();
+    }, []),
+  );
+
   const { control, handleSubmit } = useForm<StudentsFormProps>({
     defaultValues: {
       name: "",
@@ -180,7 +194,7 @@ const Students = () => {
                     content: (
                       <BasePicker
                         label={snakeCaseToTitleCase(
-                          STUDENTS_FORM_NAMES.STUDENT_GENDER,
+                          STUDENTS_FORM_NAMES.STUDENT_ROOM,
                         )}
                         options={rooms?.map(
                           (room: { name: string; id: number }) => ({

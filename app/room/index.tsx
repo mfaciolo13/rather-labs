@@ -9,7 +9,6 @@ const Room = () => {
   const router = useRouter();
   const params = useLocalSearchParams();
 
-  console.log(params);
   const { id, name, description, created_at } = params;
 
   return (
